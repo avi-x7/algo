@@ -5,6 +5,7 @@ import pattern
 import json
 import c_ema
 import c_sr
+import threading
 ## Old logics started
 candles = {}
 # if a=0 pass ,a=1 then buy ,a=2 sell
@@ -13,6 +14,7 @@ a=0
 b=0
 #c is used to run check patterns     
 c=0
+
 def check_pattern():
     print("checking patterns")
     with open('cndl.json', 'r') as fl:
@@ -37,11 +39,11 @@ def check_pattern():
                 else:
                     time.sleep(1)
                     _x+=1
-
+t1 = threading.Thread(target=check_pattern)
 def op():
     def c_cndl():
         g= requests.get('http://localhost:3000/request').text
-        print(g)
+        print(g,datetime.datetime.now())
         _ch = datetime.datetime.now().hour
         _cm = datetime.datetime.now().minute
                              # print("candle is being created")
@@ -60,7 +62,7 @@ def op():
                 'max': g,
                 'min': g,
                 'end': g
-                                                }
+                    }
         else:
         # If the minute already exists, update the values accordingly
             _c = candles[c_tme]
@@ -83,7 +85,7 @@ def op():
                 del candles[list(candles.keys())[0]]
                 c_ema.update_ema()
                 c_sr.upcrg()
-                check_pattern()
+                t1.start()
                 # global b
                 # b=1
                 global c
