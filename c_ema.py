@@ -36,6 +36,7 @@ def update_ema():
         _d["50"][c_m[0]] = e50
         _ef.seek(0)
         json.dump(_d, _ef, indent = 4)
-        print(c_m[0])
+        # print(c_m[0])
+        print("ema updated successfully")
 
 # update_ema()

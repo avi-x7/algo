@@ -4,6 +4,7 @@ import datetime
 import pattern
 import json
 import c_ema
+import c_sr
 ## Old logics started
 candles = {}
 # if a=0 pass ,a=1 then buy ,a=2 sell
@@ -12,10 +13,35 @@ a=0
 b=0
 #c is used to run check patterns     
 c=0
+def check_pattern():
+    print("checking patterns")
+    with open('cndl.json', 'r') as fl:
+        dat = json.load(fl)
+        global a,c
+        _x=0
+        if pattern.is_hammer(dat,1) and pattern.is_body(dat,0,20):
+            while _x<=200:
+                if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                    requests.get('http://localhost:3000/response/'+"buy")
+                    c=0
+                    break
+                else:
+                    time.sleep(1)
+                    _x+=1
+        elif pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
+            while _x<=200:
+                if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                    requests.get('http://localhost:3000/response/'+"buy")
+                    c=0
+                    break
+                else:
+                    time.sleep(1)
+                    _x+=1
 
 def op():
     def c_cndl():
         g= requests.get('http://localhost:3000/request').text
+        print(g)
         _ch = datetime.datetime.now().hour
         _cm = datetime.datetime.now().minute
                              # print("candle is being created")
@@ -56,66 +82,46 @@ def op():
                         print(candles)
                 del candles[list(candles.keys())[0]]
                 c_ema.update_ema()
-                global b
-                b=1
+                c_sr.upcrg()
+                check_pattern()
+                # global b
+                # b=1
                 global c
                 c=1
 
 
     def alfcndl(candles):
-        print(candles)
+         
         while True:
                 c_cndl()
                 wtf(candles)
-                time.sleep(0.6)
+                time.sleep(0.5)
         
     alfcndl(candles)
 
-def sr_update():
-        global b
-        while True:
-                if b==1:
-                        time.sleep(200)
-                        #run update function
-                        b=0
-                elif b==0:
-                        time.sleep(0.5)
-def check_pattern():
-    with open('cndl.json', 'r') as fl:
-        dat = json.load(fl)
-        global a,c
-        _x=0
-        if pattern.is_hammer(dat,1) and pattern.is_body(dat,0,20):
-            while _x<=200:
-                if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
-                    a=1
-                    c=0
-                    break
-                else:
-                    time.sleep(1)
-                    _x+=1
-        elif pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-            while _x<=200:
-                if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
-                    a=1
-                    c=0
-                    break
-                else:
-                    time.sleep(1)
-                    _x+=1
+# def sr_update():
+#         global b
+#         while True:
+#                 if b==1:
+#                         time.sleep(200)
+#                         #run update function
+#                         b=0
+#                 elif b==0:
+#                         time.sleep(0.5)
 
 
-def check():
-        while True:
-                global c
-                if c==1:
-                        check_pattern()
-                        c==2
-                elif c==2:
-                        time.sleep(240)
-                        c=0
-                elif c==0:
-                        time.sleep(0.5)
+# def check():
+#         while True:
+#                 global c
+#                 if c==1:
+#                         check_pattern()
+#                         c==2
+#                 elif c==2:
+#                         time.sleep(240)
+#                         c=0
+#                 elif c==0:
+#                         time.sleep(0.5)
+op()
 
 
 

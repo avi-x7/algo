@@ -5,6 +5,7 @@ sr=[]
 r=[]
 
 def upcrg():
+    print("sr updated successfully")
     with open('cndl.json', 'r+') as _fl:
         _da = json.load(_fl)
         st=[]
@@ -38,6 +39,6 @@ def upcrg():
         elif (cc[0]==cc[1]==cc[2]=='r' and cc[3]==cc[4]==cc[5]=='g'):
             _da["r"].insert(0,st[2])
     return cc
-print(upcrg())
+
 
 
