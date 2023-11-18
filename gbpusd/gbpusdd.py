@@ -6,6 +6,7 @@ import json
 import c_ema
 import c_sr
 import threading
+import concurrent.futures
 ## Old logics started
 candles = {}
 # if a=0 pass ,a=1 then buy ,a=2 sell
@@ -17,7 +18,7 @@ c=0
 
 def check_pattern():
     print("checking patterns")
-    with open('cndl.json', 'r') as fl:
+    with open('gu_cndl.json', 'r') as fl:
         dat = json.load(fl)
         global a,c
         _x=0
@@ -39,11 +40,13 @@ def check_pattern():
                 else:
                     time.sleep(1)
                     _x+=1
-t1 = threading.Thread(target=check_pattern)
+# t1 = threading.Thread(target=check_pattern)
 def op():
+    
     def c_cndl():
-        g= requests.get('http://localhost:3000/request').text
-        print(g,datetime.datetime.now())
+         
+        g= requests.get('http://localhost:3000/request/gbpusd').text
+        # print(g,datetime.datetime.now())
         _ch = datetime.datetime.now().hour
         _cm = datetime.datetime.now().minute
                              # print("candle is being created")
@@ -51,7 +54,7 @@ def op():
         _cm = (_cm // 5) * 5 
     # Get the current time
         c_tme = str(_ch) + ":" + str(_cm).zfill(2)
-        live=candles
+        # live=candles
         # print(c_tme,"fuckk",candles)
     # Check if the minute already exists in the dictionary
         if c_tme not in candles:
@@ -74,7 +77,7 @@ def op():
         if len(candles) >= 2:
                 _sk, _sv = list(candles.items())[0]
                 print(_sk,"&",_sv)
-                with open('cndl.json', 'r+') as file:
+                with open('gu_cndl.json', 'r+') as file:
                         data = json.load(file)
                         print(type(data))
                         data = {_sk: _sv, **data}
@@ -84,8 +87,10 @@ def op():
                         print(candles)
                 del candles[list(candles.keys())[0]]
                 c_ema.update_ema()
-                c_sr.upcrg()
-                t1.start()
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                     executor.submit(check_pattern)
+                # c_sr.upcrg()
+                # t1.start()
                 # global b
                 # b=1
                 global c
@@ -93,7 +98,6 @@ def op():
 
 
     def alfcndl(candles):
-         
         while True:
                 c_cndl()
                 wtf(candles)
@@ -125,23 +129,7 @@ def op():
 #                         time.sleep(0.5)
 op()
 
-
-
-
-
-
-
-
-
-
-
-
-response =5
-a= requests.get('http://localhost:3000/response/'+"buy")
-print(type(response),response,a)
-
-
 while True:
-    print(requests.get('http://localhost:3000/request').text)
-    time.sleep(.6)
+     print(candles)
+     time.sleep(10)
 
