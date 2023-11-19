@@ -27,11 +27,22 @@ def is_hammer(_data,n):
     body_size = abs(start_price - end_price)
     lower_shadow_size = abs(min_price - min(start_price, end_price))
     upper_shadow_size = abs(max(start_price, end_price) - max_price)
-    if body_size >= upper_shadow_size and lower_shadow_size > 2 * body_size:
+    if body_size >= upper_shadow_size and lower_shadow_size > 2 * body_size :
       return True
     else:
       return False
-
+def is_green(_data,n):
+        candle=list(_data.values())[n]
+        start_price = float(candle['start'])
+        end_price = float(candle['end'])
+        if start_price<end_price:
+            return True    
+def is_red(_data,n):
+        candle=list(_data.values())[n]
+        start_price = float(candle['start'])
+        end_price = float(candle['end'])
+        if start_price>end_price:
+            return True  
 def is_dozi(_data,n):
         candle=list(_data.values())[n]
         max_price = float(candle['max'])
@@ -39,9 +50,6 @@ def is_dozi(_data,n):
         start_price = float(candle['start'])
         end_price = float(candle['end'])
         price_diff = max_price - min_price
-        # if price_diff >=0.0002:
-        #     if(abs(start_price - end_price) * 100 / price_diff) <15:
-        #         return True
         if abs(start_price-end_price) <= 0.05 * price_diff:
             return True
         else:

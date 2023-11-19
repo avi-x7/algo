@@ -18,27 +18,29 @@ c=0
 
 def check_pattern():
     print("checking patterns")
-    with open('gu_cndl.json', 'r') as fl:
+    with open('cndl.json', 'r') as fl:
         dat = json.load(fl)
         global a,c
         _x=0
-        if pattern.is_hammer(dat,1) and pattern.is_body(dat,0,20):
-            while _x<=200:
+        #hammer pattern
+        if pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
+            while _x<=400:
                 if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
                     requests.get('http://localhost:3000/response/'+"buy")
                     c=0
                     break
                 else:
-                    time.sleep(1)
+                    time.sleep(.5)
                     _x+=1
+        #dozi pattern
         elif pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-            while _x<=200:
+            while _x<=400:
                 if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
                     requests.get('http://localhost:3000/response/'+"buy")
                     c=0
                     break
                 else:
-                    time.sleep(1)
+                    time.sleep(.5)
                     _x+=1
 # t1 = threading.Thread(target=check_pattern)
 def op():
