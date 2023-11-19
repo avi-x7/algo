@@ -6,7 +6,7 @@ r=[]
 
 def upcrg():
     print("sr updated successfully")
-    with open('gu_cndl.json', 'r+') as _fl:
+    with open('cndl.json', 'r+') as _fl:
         _da = json.load(_fl)
         st=[]
         ed=[]

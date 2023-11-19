@@ -1,2 +1,4 @@
 node_modules/
+venv-eurusd/
+venv-gbpusd/
 __pycache__

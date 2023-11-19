@@ -7,7 +7,7 @@ def calculate_ema(data, period, previous_ema):
     return round(current_ema, 6)
 
 def update_ema():
-    with open('gu_cndl.json', 'r+') as file:
+    with open('cndl.json', 'r+') as file:
         data = json.load(file)
         c_m = list(data.keys())
     # Load the previous EMA from the 'ema.json' file

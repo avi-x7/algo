@@ -77,7 +77,7 @@ def op():
         if len(candles) >= 2:
                 _sk, _sv = list(candles.items())[0]
                 print(_sk,"&",_sv)
-                with open('gu_cndl.json', 'r+') as file:
+                with open('cndl.json', 'r+') as file:
                         data = json.load(file)
                         print(type(data))
                         data = {_sk: _sv, **data}
