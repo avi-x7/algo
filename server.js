@@ -15,12 +15,13 @@ let eur_usd_v,gbp_usd_v = 0;
   const gbpusd_locator = page.locator('//*[@id="currencies"]/div[2]/div[2]/div[5]/div[1]/div/div/div[1]/div[2]/div[1]');
   const page2 = await context.newPage();
   await page2.goto("https://olymptrade.com/login");
-
-  const buy = () => {
-    page2.click(".deal-button_up");
+  const page3 = await context.newPage();
+  await page3.goto("https://olymptrade.com/");
+  const buy = (pag) => {
+    pag.click(".deal-button_up");
   };
-  const sell = () => {
-    page2.click(".deal-button_down");
+  const sell = (pag) => {
+    pag.click(".deal-button_down");
   };
   loop = async () => {
     while (true) {
@@ -40,12 +41,21 @@ let eur_usd_v,gbp_usd_v = 0;
     }
   });
 
-  app.get("/response/:id", (req, res) => {
+  app.get("/eurusd/:id", (req, res) => {
     const id = req.params.id;
     if (id == "buy") {
-      buy();
+      buy(page2);
     } else if (id == "sell") {
-      sell();
+      sell(page2);
+    }
+    res.sendStatus(200);
+  });
+  app.get("/gbpusd/:id", (req, res) => {
+    const id = req.params.id;
+    if (id == "buy") {
+      buy(page3);
+    } else if (id == "sell") {
+      sell(page3);
     }
     res.sendStatus(200);
   });

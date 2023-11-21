@@ -22,26 +22,57 @@ def check_pattern():
         dat = json.load(fl)
         global a,c
         _x=0
-        #hammer pattern
-        if pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
-            while _x<=400:
-                if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
-                    requests.get('http://localhost:3000/response/'+"buy")
-                    c=0
-                    break
-                else:
-                    time.sleep(.5)
-                    _x+=1
+
         #dozi pattern
-        elif pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-            while _x<=400:
-                if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
-                    requests.get('http://localhost:3000/response/'+"buy")
-                    c=0
-                    break
-                else:
-                    time.sleep(.5)
-                    _x+=1
+        def check_hammer_dozi():
+            if pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
+                while _x<=400:
+                    if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                        requests.get('http://localhost:3000/gbpusd/'+"buy")
+                        c=0
+                        print("dozi found")
+                        break
+                    else:
+                        time.sleep(.5)
+                        _x+=1
+
+        #hammer pattern
+            elif pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
+                while _x<=400:
+                    if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                        requests.get('http://localhost:3000/gbpusd/'+"buy")
+                        print("hammer found")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _x+=1
+        def check_mo_star():
+             if pattern.is_morning_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                print("morning star found")
+                while _x<=400:
+                    if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                        requests.get('http://localhost:3000/gbpusd/'+"buy")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _x+=1
+        def check_ev_star():
+             if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                print(" evening found")
+                while _x<=400:
+                    if float(list(dat.values())[0]['min']) < float(list(candles.values())[0]['min']):
+                        requests.get('http://localhost:3000/gbpusd/'+"buy")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _x+=1
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+                     executor.submit(check_hammer_dozi)
+                     executor.submit(check_mo_star)
+                     executor.submit(check_ev_star)
 # t1 = threading.Thread(target=check_pattern)
 def op():
     
@@ -88,7 +119,7 @@ def op():
                         file.truncate()
                         print(candles)
                 del candles[list(candles.keys())[0]]
-                c_ema.update_ema()
+                # c_ema.update_ema()
                 with concurrent.futures.ThreadPoolExecutor() as executor:
                      executor.submit(check_pattern)
                 # c_sr.upcrg()
