@@ -55,21 +55,21 @@ def is_body(_data,n,b):
 
 def is_morning_star(candle1, candle2, candle3):
    # Check if candle1 is a long red candle
-   if float(candle1['start']) < float(candle1['end']):
+   if float(candle1['start']) > float(candle1['end']):
        # Check if candle2 is a small or doji green candle
        if (abs(float(candle2['start']) - float(candle2['end']))) <((float(candle2['max']) - float(candle2['min'])) * 0.1):
            # Check if candle3 is a long green candle
-           if float(candle3['start']) > float(candle3['end']):
+           if float(candle3['start']) < float(candle3['end']):
                return True
    return False
 
 def is_evening_star(candle1, candle2, candle3):
    # Check if the first candlestick is green
-   if float(candle1['start']) > float(candle1['end']) :
+   if float(candle1['start']) < float(candle1['end']) :
        # Check if the second (candlestick is small
        if (abs(float(candle2['start']) - float(candle2['end']))) < ((float(candle2['max']) - float(candle2['min'])) * 0.1):
            # Check if the third (candlestick is red
-           if float(candle3['start']) < float(candle3['end']):
+           if float(candle3['start']) > float(candle3['end']):
                # Check if the closing price of the third (candlestick is below the middle of the first (candlestick
                if float(candle3['end']) < ((float(candle1['start']) + float(candle1['end'])) / 2):
                   return True

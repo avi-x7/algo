@@ -37,14 +37,14 @@ def check_pattern():
             # print(bb,">::",type(bb))
             # print(float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text),":>",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
 
-            if pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
+            if pattern.is_red(dat,2) and pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
                 print(f'dozi' )
                 print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']))
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
-                        print("hammer found")
+                        print(" DOZI found")
                         c=0
                         break
                     else:
