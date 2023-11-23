@@ -17,38 +17,61 @@ b=0
 c=0
 
 def check_pattern():
-    print("checking patterns")
+    # print("checking patterns",datetime.datetime.now())
     with open('cndl.json', 'r') as fl:
         dat = json.load(fl)
         global a,c
-        _x=0
+         
+        # pattern.printer(dat)
+# printtttt
+        # print(list(candles.items())[0][0], ":", "upper :" ,"body :" ,"lower :")
+        # sc=list(dat.values())
+        # print((sc[0]['max']-max(sc[0]['start'],sc[0]['end']))*100/(sc[0]['max']-sc[0]['min']))
+
         #hammer pattern
         def check_hammer_dozi():
+            # print(f'checking_hd_patterns',datetime.datetime.now() )
+            # aa=float(list(dat.values())[0]['max']) 
+            # bb= float(requests.get('http://localhost:3000/request/eurusd').text)
+            # print(aa,">?",type(aa))
+            # print(bb,">::",type(bb))
+            # print(float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text),":>",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
+
             if pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
+                print(f'dozi' )
+                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']))
+                _x=0
                 while _x<=400:
-                    if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                    if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
                         print("hammer found")
                         c=0
                         break
                     else:
                         time.sleep(.5)
+                        print("else",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
                         _x+=1
             elif pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
+                print(f'hammer' )
+                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']))
+                _x=0
                 while _x<=400:
-                    if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                    if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
                         c=0
                         print("hammer found")
                         break
                     else:
                         time.sleep(.5)
+                        print("else",float(list(dat.values())[0]['max']) ,(requests.get('http://localhost:3000/request/eurusd').text))
                         _x+=1
         def check_mo_star():
+            #  print(f'checking_morning_star',datetime.datetime.now() )
              if pattern.is_morning_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
                 print("morning star found")
+                _x=0
                 while _x<=400:
-                    if float(list(dat.values())[0]['max']) < float(list(candles.values())[0]['max']):
+                    if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
                         c=0
                         break
@@ -56,11 +79,13 @@ def check_pattern():
                         time.sleep(.5)
                         _x+=1
         def check_ev_star():
-             if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+            print(f'checking_evening_star' ,datetime.datetime.now())
+            if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
                 print(" evening found")
+                _x=0
                 while _x<=400:
-                    if float(list(dat.values())[0]['min']) < float(list(candles.values())[0]['min']):
-                        requests.get('http://localhost:3000/eurusd/'+"buy")
+                    if float(list(dat.values())[0]['min']) < float(requests.get('http://localhost:3000/request/eurusd').text):
+                        requests.get('http://localhost:3000/eurusd/'+"sell")
                         c=0
                         break
                     else:
@@ -102,24 +127,24 @@ def op():
             _c['max'] = max(_c['max'], g)
             _c['min'] = min(_c['min'], g)
             _c['end'] = g
-
+    
     def wtf(candles):
         if len(candles) >= 2:
                 _sk, _sv = list(candles.items())[0]
-                print(_sk,"&",_sv)
+                # print(_sk,"&",_sv)
                 with open('cndl.json', 'r+') as file:
                         data = json.load(file)
-                        print(type(data))
+                        # print(type(data))
                         data = {_sk: _sv, **data}
                         file.seek(0)
                         json.dump(data, file, indent=4)
                         file.truncate()
-                        print(candles)
+                        # print(candles)
                 del candles[list(candles.keys())[0]]
-                c_ema.update_ema()
+                # c_ema.update_ema()
                 with concurrent.futures.ThreadPoolExecutor() as executor:
                      executor.submit(check_pattern)
-                print('fine')
+                # print('fine')
                 # c_sr.upcrg()
                 # t1.start()
                 # global b
