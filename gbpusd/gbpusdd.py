@@ -26,38 +26,38 @@ def check_pattern():
         #dozi pattern
         def check_hammer_dozi():
             if pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-                print(f'dozi' )
-                print(":::",list(dat.values())[0]['max'] , float(list(candles.values())[0]['max']))
+                print(f'dozi',end="")
+                print(":::",list(dat.values())[0]['max'] , float(list(candles.values())[0]['max']),end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/gbpusd').text):
                         requests.get('http://localhost:3000/gbpusd/'+"buy")
                         c=0
-                        print("dozi found")
+                        print("dozi found",end=" ")
                         break
                     else:
                         time.sleep(.5)
-                        print("else",float(list(dat.values())[0]['max']) , (requests.get('http://localhost:3000/request/gbpusd').text))
+                        # print("else",float(list(dat.values())[0]['max']) , (requests.get('http://localhost:3000/request/gbpusd').text))
                         _x+=1
 
         #hammer pattern
             elif pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
-                print(f'hammer' )
+                print(f'hammer',end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/gbpusd').text):
                         requests.get('http://localhost:3000/gbpusd/'+"buy")
-                        print("hammer found")
+                        print("hammer found",end=" ")
                         c=0
                         break
                     else:
                         time.sleep(.5)
-                        print("else",float(list(dat.values())[0]['max']) , (requests.get('http://localhost:3000/request/gbpusd').text))
+                        # print("else",float(list(dat.values())[0]['max']) , (requests.get('http://localhost:3000/request/gbpusd').text))
                         _x+=1
         def check_mo_star():
             #  print(f'checking_morning_star' )
              if pattern.is_morning_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print("morning star found")
+                print("morning star found",end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/gbpusd').text):
@@ -68,12 +68,12 @@ def check_pattern():
                         time.sleep(.5)
                         _x+=1
         def check_ev_star():
-             print(f'checking_evening_star',datetime.datetime.now() )
-             if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print(" evening found")
+            print(datetime.datetime.now().time())
+            if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                print(" evening found", end=" ")
                 _x=0
                 while _x<=400:
-                    if float(list(dat.values())[0]['min']) < float(requests.get('http://localhost:3000/request/gbpusd').text):
+                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/gbpusd').text):
                     # if float(list(dat.values())[0]['min']) < float(list(candles.values())[0]['min']):
                         requests.get('http://localhost:3000/gbpusd/'+"sell")
                         c=0

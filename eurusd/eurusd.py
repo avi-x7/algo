@@ -38,13 +38,13 @@ def check_pattern():
             # print(float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text),":>",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
 
             if pattern.is_red(dat,2) and pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-                print(f'dozi' )
-                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']))
+                print(f'dozi',end=" ")
+                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']),end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
-                        print(" DOZI found")
+                        print(" DOZI found",end=" ")
                         c=0
                         break
                     else:
@@ -52,23 +52,23 @@ def check_pattern():
                         print("else",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
                         _x+=1
             elif pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
-                print(f'hammer' )
-                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']))
+                print(f'hammer',end=" ")
+                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']),end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
                         c=0
-                        print("hammer found")
+                        print("hammer found",end=" ")
                         break
                     else:
                         time.sleep(.5)
-                        print("else",float(list(dat.values())[0]['max']) ,(requests.get('http://localhost:3000/request/eurusd').text))
+                        # print("else",float(list(dat.values())[0]['max']) ,(requests.get('http://localhost:3000/request/eurusd').text))
                         _x+=1
         def check_mo_star():
             #  print(f'checking_morning_star',datetime.datetime.now() )
              if pattern.is_morning_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print("morning star found")
+                print("morning star found",end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
@@ -79,12 +79,12 @@ def check_pattern():
                         time.sleep(.5)
                         _x+=1
         def check_ev_star():
-            print(f'checking_evening_star' ,datetime.datetime.now())
+            print(datetime.datetime.now().time())
             if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
                 print(" evening found")
                 _x=0
                 while _x<=400:
-                    if float(list(dat.values())[0]['min']) < float(requests.get('http://localhost:3000/request/eurusd').text):
+                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"sell")
                         c=0
                         break
