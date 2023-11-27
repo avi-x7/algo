@@ -11,17 +11,17 @@ let eur_usd_v,gbp_usd_v = 0;
   const page1 = await context.newPage();
   const page2 = await context.newPage();
   const page3 = await context.newPage();
-  const page4 = await context.newPage();
-  const page5 = await context.newPage();
+  // const page4 = await context.newPage();
+  // const page5 = await context.newPage();
   await page.goto("https://in.tradingview.com/symbols/EURUSD/");
   await page1.goto("https://in.tradingview.com/symbols/GBPUSD/");
   await page2.goto("https://olymptrade.com/login");
   await page3.goto("https://olymptrade.com/");
-  await page4.goto("https://in.tradingview.com/symbols/GBPUSD/");
-  await page5.goto("https://olymptrade.com/");
+  // await page4.goto("https://in.tradingview.com/symbols/GBPUSD/");
+  // await page5.goto("https://olymptrade.com/");
   const eurusd_locator = page.locator('.last-JWoJqCpY.js-symbol-last');
   const gbpusd_locator = page1.locator('.last-JWoJqCpY.js-symbol-last');
-  const random_locator = page4.locator('.last-JWoJqCpY.js-symbol-last');
+  // const random_locator = page4.locator('.last-JWoJqCpY.js-symbol-last');
 
 
   const buy = (pag) => {
@@ -34,7 +34,7 @@ let eur_usd_v,gbp_usd_v = 0;
     while (true) {
       eur_usd_v =await eurusd_locator.innerText()
       gbp_usd_v = await gbpusd_locator.innerText()
-      random_v =await random_locator.innerText()
+      // random_v =await random_locator.innerText()
       await new Promise((resolve) => setTimeout(resolve, 600));
     }
   };
@@ -47,9 +47,9 @@ let eur_usd_v,gbp_usd_v = 0;
     else if (iq=="gbpusd"){
       res.send(gbp_usd_v.toString());
     }
-    else if (iq=="random"){
-      res.send(random_v.toString());
-    }
+    // else if (iq=="random"){
+    //   res.send(random_v.toString());
+    // }
   });
 
   app.get("/eurusd/:id", (req, res) => {
@@ -70,14 +70,14 @@ let eur_usd_v,gbp_usd_v = 0;
     }
     res.sendStatus(200);
   });
-  app.get("/random/:id", (req, res) => {
-    const id = req.params.id;
-    if (id == "buy") {
-      buy(page5);
-    } else if (id == "sell") {
-      sell(page5);
-    }
-    res.sendStatus(200);
-  });
+  // app.get("/random/:id", (req, res) => {
+  //   const id = req.params.id;
+  //   if (id == "buy") {
+  //     buy(page5);
+  //   } else if (id == "sell") {
+  //     sell(page5);
+  //   }
+  //   res.sendStatus(200);
+  // });
   app.listen(3000, (data) => console.log("Server running on port 3000", data));
 })();
