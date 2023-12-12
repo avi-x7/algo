@@ -23,25 +23,11 @@ def check_pattern():
         global a,c
         
 
-        #dozi pattern
+        #downtrend to uptrend pattern +=> Buy
         def check_hammer_dozi():
-            if pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-                print(f'dozi',end="")
-                print(":::",list(dat.values())[0]['max'] , float(list(candles.values())[0]['max']),end=" ")
-                _x=0
-                while _x<=400:
-                    if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/gbpusd').text):
-                        requests.get('http://localhost:3000/gbpusd/'+"buy")
-                        c=0
-                        print("dozi found",end=" ")
-                        break
-                    else:
-                        time.sleep(.5)
-                        # print("else",float(list(dat.values())[0]['max']) , (requests.get('http://localhost:3000/request/gbpusd').text))
-                        _x+=1
 
         #hammer pattern
-            elif pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
+            if pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
                 print(f'hammer',end=" ")
                 _x=0
                 while _x<=400:
@@ -56,26 +42,57 @@ def check_pattern():
                         _x+=1
         def check_mo_star():
             #  print(f'checking_morning_star' )
-             if pattern.is_morning_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print("morning star found",end=" ")
+             if pattern.is_morning_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                print("morning star",end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/gbpusd').text):
                         requests.get('http://localhost:3000/gbpusd/'+"buy")
+                        print("morning star found",end=" ")
                         c=0
                         break
                     else:
                         time.sleep(.5)
                         _x+=1
+
+        # uptrend to downtrend +==> sell
+        def check_shoot_hang():
+            if pattern.is_green(dat,3) and pattern.is_green(dat,2) and pattern.is_shooting_star(dat,1) and pattern.is_red(dat,0):
+                print("shoot",end="")
+                _y=0
+                while _y<=400:
+                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/gbpusd').text):
+                        requests.get('http://localhost:3000/gbpusd/'+"sell")
+                        print("shooting star found",end=" ")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _y+=1
+            elif pattern.is_green(dat,3) and pattern.is_green(dat,2) and pattern.is_hanging_man(dat,1) and pattern.is_red(dat,0):
+                print("hang",end="")
+                _y=0
+                while _y<=400:
+                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/gbpusd').text):
+                        requests.get('http://localhost:3000/gbpusd/'+"sell")
+                        print("hanging man found",end=" ")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _y+=1
+
+
         def check_ev_star():
             print(datetime.datetime.now().time())
-            if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print(" evening found", end=" ")
+            if pattern.is_evening_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                print(" evening star", end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/gbpusd').text):
                     # if float(list(dat.values())[0]['min']) < float(list(candles.values())[0]['min']):
                         requests.get('http://localhost:3000/gbpusd/'+"sell")
+                        print("evening star found",end=" ")
                         c=0
                         break
                     else:
@@ -84,6 +101,7 @@ def check_pattern():
         with concurrent.futures.ThreadPoolExecutor() as executor:
                      executor.submit(check_hammer_dozi)
                      executor.submit(check_mo_star)
+                     executor.submit(check_shoot_hang)
                      executor.submit(check_ev_star)
 # t1 = threading.Thread(target=check_pattern)
 def op():

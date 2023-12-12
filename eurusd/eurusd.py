@@ -22,38 +22,11 @@ def check_pattern():
         dat = json.load(fl)
         global a,c
          
-        # pattern.printer(dat)
-# printtttt
-        # print(list(candles.items())[0][0], ":", "upper :" ,"body :" ,"lower :")
-        # sc=list(dat.values())
-        # print((sc[0]['max']-max(sc[0]['start'],sc[0]['end']))*100/(sc[0]['max']-sc[0]['min']))
-
-        #hammer pattern
+ 
+        #downtrend to uptrend pattern +=> Buy
         def check_hammer_dozi():
-            # print(f'checking_hd_patterns',datetime.datetime.now() )
-            # aa=float(list(dat.values())[0]['max']) 
-            # bb= float(requests.get('http://localhost:3000/request/eurusd').text)
-            # print(aa,">?",type(aa))
-            # print(bb,">::",type(bb))
-            # print(float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text),":>",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
-
-            if pattern.is_red(dat,2) and pattern.is_dozi(dat,1) and pattern.is_body(dat,0,20):
-                print(f'dozi',end=" ")
-                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']),end=" ")
-                _x=0
-                while _x<=400:
-                    if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
-                        requests.get('http://localhost:3000/eurusd/'+"buy")
-                        print(" DOZI found",end=" ")
-                        c=0
-                        break
-                    else:
-                        time.sleep(.5)
-                        print("else",float(list(dat.values())[0]['max']) , float(requests.get('http://localhost:3000/request/eurusd').text))
-                        _x+=1
-            elif pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
+            if pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
                 print(f'hammer',end=" ")
-                print(":::",float(list(dat.values())[0]['max']) , float(list(candles.values())[0]['max']),end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
@@ -67,25 +40,55 @@ def check_pattern():
                         _x+=1
         def check_mo_star():
             #  print(f'checking_morning_star',datetime.datetime.now() )
-             if pattern.is_morning_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print("morning star found",end=" ")
+             if pattern.is_morning_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                print("morning star",end=" ")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"buy")
+                        print("morning star found",end=" ")
                         c=0
                         break
                     else:
                         time.sleep(.5)
                         _x+=1
+
+        # uptrend to downtrend +==> sell
+        def check_shoot_hang():
+            if pattern.is_green(dat,3) and pattern.is_green(dat,2) and pattern.is_shooting_star(dat,1) and pattern.is_red(dat,0):
+                print("shoot",end="")
+                _y=0
+                while _y<=400:
+                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/eurusd').text):
+                        requests.get('http://localhost:3000/eurusd/'+"sell")
+                        print("shooting star found",end=" ")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _y+=1
+            elif pattern.is_green(dat,3) and pattern.is_green(dat,2) and pattern.is_hanging_man(dat,1) and pattern.is_red(dat,0):
+                print("hang",end="")
+                _y=0
+                while _y<=400:
+                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/eurusd').text):
+                        requests.get('http://localhost:3000/eurusd/'+"sell")
+                        print("hanging man found",end=" ")
+                        c=0
+                        break
+                    else:
+                        time.sleep(.5)
+                        _y+=1
+
         def check_ev_star():
             print(datetime.datetime.now().time())
             if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print(" evening found")
+                print(" evening star",end="")
                 _x=0
                 while _x<=400:
                     if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/eurusd').text):
                         requests.get('http://localhost:3000/eurusd/'+"sell")
+                        print("evening star found",end=" ")
                         c=0
                         break
                     else:
@@ -96,6 +99,7 @@ def check_pattern():
         with concurrent.futures.ThreadPoolExecutor() as executor:
                      executor.submit(check_hammer_dozi)
                      executor.submit(check_mo_star)
+                     executor.submit(check_shoot_hang)
                      executor.submit(check_ev_star)
 # t1 = threading.Thread(target=check_pattern)
 def op():
