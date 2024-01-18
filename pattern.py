@@ -1,13 +1,12 @@
 import time
 import json
-#morning start me green ki body red k half se jyada krni h and hammer me hammer k baad wale ki body jyada krni h
 # def check():
-#     f2=list(data.values())[1]
 #     with open('cndl.json', 'r+') as file:
 #         data = json.load(file)
 #     #print(data.keys())
 #     #print(list(data.values())[0])
 #     f1=list(data.values())[0]
+#     f2=list(data.values())[1]
 #     f3=list(data.values())[2]
     #start_matching
     #print(f1,f2['start'],f3['end'])
@@ -33,8 +32,6 @@ def is_red(_data,n):
         if start_price>end_price:
             return True 
 
-
-
 # downtrend to uptrend +==> buy
 # Hammer, inverted hammer
 def is_hammer(_data,n):
@@ -43,11 +40,11 @@ def is_hammer(_data,n):
     min_price = float(candle['min'])
     start_price = float(candle['start'])
     end_price = float(candle['end'])
-    # price_diff = max_price - min_price
+    price_diff = max_price - min_price
     body_size = abs(start_price - end_price)
     lower_shadow_size = abs(min_price - min(start_price, end_price))
     upper_shadow_size = abs(max(start_price, end_price) - max_price)
-    if ((upper_shadow_size)>(2*body_size)) or ((lower_shadow_size) > (2 * body_size)) :
+    if ((upper_shadow_size)>(2*body_size)) or ((lower_shadow_size) >  (2 *body_size)) :
       return True
     else:
       return False
@@ -56,16 +53,15 @@ def is_hammer(_data,n):
 def is_morning_star(candle1, candle2, candle3,candle4):
    # Check if candle1 is a long red candle
    if float(candle1['start']) > float(candle1['end']):
-       # Check if candle2 is a small or doji green candle
-       if (abs(float(candle2['start']) - float(candle2['end']))) <((float(candle2['max']) - float(candle2['min'])) * 0.15):
-           # Check if candle3 is a long green candle
+       # Check if float(candle2 is a small or doji green float(candle
+       if (abs(float(candle2['start']) - float(candle2['end']))) <((float(candle2['max']) - float(candle2['min'])) * 0.1):
+           # Check if float(candle3 is a long green float(candle
            if float(candle3['start']) < float(candle3['end']):
                if float(candle4['start']) < float(candle4['end']):
                 # Check if the closing price of the third float(candlestick is above the middle of the first float(candlestick
                 if float(candle3['end']) > ((float(candle1['start']) + float(candle1['end'])) / 2):
                     return True
    return False
-
 
 # bullish engulfing
 # piercing line ,, bullish abandoned baby
@@ -107,12 +103,12 @@ def is_hanging_man(_data,n):
 def is_evening_star(candle1, candle2, candle3,candle4):
    # Check if the first candlestick is green
    if float(candle1['start']) < float(candle1['end']) :
-       # Check if the second (candlestick is small
+       # Check if the second float(candlestick is small
        if (abs(float(candle2['start']) - float(candle2['end']))) < ((float(candle2['max']) - float(candle2['min'])) * 0.1):
-           # Check if the third (candlestick is red
+           # Check if the third float(candlestick is red
            if float(candle3['start']) > float(candle3['end']):
                if float(candle4['start']) > float(candle4['end']):
-               # Check if the closing price of the third (candlestick is below the middle of the first (candlestick
+               # Check if the closing price of the third float(candlestick is below the middle of the first float(candlestick
                     if float(candle3['end']) < ((float(candle1['start']) + float(candle1['end'])) / 2):
                         return True
    return False
@@ -137,40 +133,24 @@ def is_evening_star(candle1, candle2, candle3,candle4):
 
 
 
-
-
-
-
 def is_dozi(_data,n):
-    candle=list(_data.values())[n]
-    max_price = float(candle['max'])
-    min_price = float(candle['min'])
-    start_price = float(candle['start'])
-    end_price = float(candle['end'])
-    price_diff = max_price - min_price
-    if ((abs(start_price-end_price)) <=( 0.05 * price_diff)):
-        return True
-    else:
-        return False
-      
+        candle=list(_data.values())[n]
+        max_price = float(candle['max'])
+        min_price = float(candle['min'])
+        start_price = float(candle['start'])
+        end_price = float(candle['end'])
+        price_diff = max_price - min_price
+        if ((abs(start_price-end_price)) <=( 0.05 * price_diff)):
+            return True
+        else:
+            return False
 
 
-# def trend(_data):
-#     _sum3=0
-#     for _a in range(2,5):
-#         candle=list(_data.values())[_a]
-#         _sum3 += float(candle['end'])
-#     sma3=_sum3/3
-#     _sum5=0
-#     for _b in range(2,7):
-#         candle=list(_data.values())[_b]
-#         _sum5 += float(candle['end'])
-#     sma5=_sum5/5
-#     if (sma3>sma5):
-#         return "up"
-#     elif (sma5>sma3):
-#         return "down"
-#     else:
-#         return "n"
+
+
+
+
+
     
 
+# check()

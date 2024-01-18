@@ -151,6 +151,23 @@ def is_dozi(_data,n):
 
 
 
+def trend(_data):
+    _sum3=0
+    for _a in range(2,5):
+        candle=list(_data.values())[_a]
+        _sum3 += float(candle['end'])
+    sma3=_sum3/3
+    _sum5=0
+    for _b in range(2,7):
+        candle=list(_data.values())[_b]
+        _sum5 += float(candle['end'])
+    sma5=_sum5/5
+    if (sma3>sma5):
+        return "up"
+    elif (sma5>sma3):
+        return "down"
+    else:
+        return "n"
     
 
 # check()

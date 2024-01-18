@@ -39,19 +39,20 @@ def check_pattern():
                         # print("else",float(list(dat.values())[0]['max']) ,(requests.get('http://localhost:3000/request/eurusd').text))
                         _x+=1
         def check_mo_star():
-            #  print(f'checking_morning_star',datetime.datetime.now() )
-             if pattern.is_morning_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print("morning star",end=" ")
-                _x=0
-                while _x<=400:
-                    if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
-                        requests.get('http://localhost:3000/eurusd/'+"buy")
-                        print("morning star found",end=" ")
-                        c=0
-                        break
-                    else:
-                        time.sleep(.5)
-                        _x+=1
+             if pattern.trend(dat) == "down":
+                #  print(f'checking_morning_star',datetime.datetime.now() )
+                 if pattern.is_morning_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                    print("morning star",end=" ")
+                    _x=0
+                    while _x<=400:
+                        if float(list(dat.values())[0]['max']) < float(requests.get('http://localhost:3000/request/eurusd').text):
+                            requests.get('http://localhost:3000/eurusd/'+"buy")
+                            print("morning star found",end=" ")
+                            c=0
+                            break
+                        else:
+                            time.sleep(.5)
+                            _x+=1
 
         # uptrend to downtrend +==> sell
         def check_shoot_hang():
@@ -81,19 +82,20 @@ def check_pattern():
                         _y+=1
 
         def check_ev_star():
-            print(datetime.datetime.now().time())
-            if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
-                print(" evening star",end="")
-                _x=0
-                while _x<=400:
-                    if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/eurusd').text):
-                        requests.get('http://localhost:3000/eurusd/'+"sell")
-                        print("evening star found",end=" ")
-                        c=0
-                        break
-                    else:
-                        time.sleep(.5)
-                        _x+=1
+            if pattern.trend(dat) == "up":
+                print(datetime.datetime.now().time())
+                if pattern.is_evening_star(list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
+                    print(" evening star",end="")
+                    _x=0
+                    while _x<=400:
+                        if float(list(dat.values())[0]['min']) > float(requests.get('http://localhost:3000/request/eurusd').text):
+                            requests.get('http://localhost:3000/eurusd/'+"sell")
+                            print("evening star found",end=" ")
+                            c=0
+                            break
+                        else:
+                            time.sleep(.5)
+                            _x+=1
 
         # t1.join()
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -198,15 +200,4 @@ op()
 
 
 
-
-
-
-response =5
-a= requests.get('http://localhost:3000/response/'+"buy")
-print(type(response),response,a)
-
-
-while True:
-    print(requests.get('http://localhost:3000/request').text)
-    time.sleep(.6)
 
