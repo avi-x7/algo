@@ -54,14 +54,15 @@ def is_hammer(_data,n):
 
 # morning star
 def is_morning_star(candle1, candle2, candle3,candle4):
-   # Check if candle1 is a long red candle
+   # Check if candle1 is a red candle
    if float(candle1['start']) > float(candle1['end']):
-       # Check if candle2 is a small or doji green candle
-       if (abs(float(candle2['start']) - float(candle2['end']))) <((float(candle2['max']) - float(candle2['min'])) * 0.15):
-           # Check if candle3 is a long green candle
+       # Check if candle2 body is 20%
+       if (abs(float(candle2['start']) - float(candle2['end']))) <((float(candle2['max']) - float(candle2['min'])) * 0.2):
+           # Check if candle3 is a green candle
            if float(candle3['start']) < float(candle3['end']):
+               # Check if candle4 is a green candle
                if float(candle4['start']) < float(candle4['end']):
-                # Check if the closing price of the third float(candlestick is above the middle of the first float(candlestick
+                # Check if the closing price of the candle3 is above the middle of the candle1
                 if float(candle3['end']) > ((float(candle1['start']) + float(candle1['end'])) / 2):
                     return True
    return False
@@ -107,12 +108,13 @@ def is_hanging_man(_data,n):
 def is_evening_star(candle1, candle2, candle3,candle4):
    # Check if the first candlestick is green
    if float(candle1['start']) < float(candle1['end']) :
-       # Check if the second (candlestick is small
-       if (abs(float(candle2['start']) - float(candle2['end']))) < ((float(candle2['max']) - float(candle2['min'])) * 0.1):
-           # Check if the third (candlestick is red
+       # Check if the second candles body is less than 20%
+       if (abs(float(candle2['start']) - float(candle2['end']))) < ((float(candle2['max']) - float(candle2['min'])) * 0.2):
+           # Check if the third candlestick is red
            if float(candle3['start']) > float(candle3['end']):
+               #check if 4th candle is red
                if float(candle4['start']) > float(candle4['end']):
-               # Check if the closing price of the third (candlestick is below the middle of the first (candlestick
+               # Check if the closing price of the candle3 is below the middle of the candle1
                     if float(candle3['end']) < ((float(candle1['start']) + float(candle1['end'])) / 2):
                         return True
    return False

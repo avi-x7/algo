@@ -27,7 +27,7 @@ def check_pattern():
         def check_hammer_dozi():
 
         #hammer pattern
-            if pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,0):
+            if pattern.is_red(dat,2) and pattern.is_hammer(dat,1) and pattern.is_green(dat,1) and pattern.is_green(dat,0):
                 print(f'hammer',end=" ")
                 _x=0
                 while _x<=400:
@@ -41,6 +41,7 @@ def check_pattern():
                         # print("else",float(list(dat.values())[0]['max']) , (requests.get('http://localhost:3000/request/gbpusd').text))
                         _x+=1
         def check_mo_star():
+             print(pattern.trend(dat),type(pattern.trend(dat)))
              if pattern.trend(dat) == "down":
                 #  print(f'checking_morning_star' )
                  if pattern.is_morning_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
@@ -86,7 +87,7 @@ def check_pattern():
 
         def check_ev_star():
             if pattern.trend(dat) == "up":
-                print(datetime.datetime.now().time())
+                # print(datetime.datetime.now().time())
                 if pattern.is_evening_star(list(dat.values())[3],list(dat.values())[2],list(dat.values())[1],list(dat.values())[0]):
                     print(" evening star", end=" ")
                     _x=0
@@ -101,6 +102,7 @@ def check_pattern():
                             time.sleep(.5)
                             _x+=1
         with concurrent.futures.ThreadPoolExecutor() as executor:
+                     print(datetime.datetime.now().time())
                      executor.submit(check_hammer_dozi)
                      executor.submit(check_mo_star)
                      executor.submit(check_shoot_hang)
